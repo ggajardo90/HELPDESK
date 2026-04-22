@@ -18,6 +18,7 @@ $solicitudes = $conexion->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Solicitudes</title>
@@ -26,33 +27,38 @@ $solicitudes = $conexion->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
 <body class="container mt-5">
 
-<h3>Solicitudes</h3>
+    <h3>Solicitudes</h3>
 
-<a href="crear.php" class="btn btn-primary mb-3">Nueva Solicitud</a>
+    <a href="crear.php" class="btn btn-primary mb-3">Nueva Solicitud</a>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Prioridad</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
 
-    <tbody>
-        <?php foreach ($solicitudes as $s): ?>
-        <tr>
-            <td><?= $s['id'] ?></td>
-            <td><?= $s['titulo'] ?></td>
-            <td><?= $s['prioridad'] ?></td>
-            <td><?= $s['estado'] ?></td>
-            <td><?= $s['fecha_creacion'] ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        <tbody>
+            <?php foreach ($solicitudes as $s): ?>
+                <tr>
+                    <td><?= $s['id'] ?></td>
+                    <td>
+                        <a href="ver.php?id=<?= $s['id'] ?>">
+                            <?= $s['titulo'] ?>
+                        </a>
+                    </td>
+                    <td><?= $s['prioridad'] ?></td>
+                    <td><?= $s['estado'] ?></td>
+                    <td><?= $s['fecha_creacion'] ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
 </body>
+
 </html>
