@@ -51,8 +51,30 @@ $solicitudes = $conexion->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             <?= $s['titulo'] ?>
                         </a>
                     </td>
-                    <td><?= $s['prioridad'] ?></td>
-                    <td><?= $s['estado'] ?></td>
+                    <td>
+                        <?php
+                        $color = "secondary";
+
+                        if ($s['prioridad'] == "Baja") $color = "success";
+                        if ($s['prioridad'] == "Media") $color = "warning";
+                        if ($s['prioridad'] == "Alta") $color = "danger";
+                        ?>
+                        <span class="badge badge-<?= $color ?>">
+                            <?= $s['prioridad'] ?>
+                        </span>
+                    </td>
+                    <td>
+                        <?php
+                        $color = "secondary";
+
+                        if ($s['estado'] == "Pendiente") $color = "warning";
+                        if ($s['estado'] == "En proceso") $color = "primary";
+                        if ($s['estado'] == "Finalizado") $color = "success";
+                        ?>
+                        <span class="badge badge-<?= $color ?>">
+                            <?= $s['estado'] ?>
+                        </span>
+                    </td>
                     <td><?= $s['fecha_creacion'] ?></td>
                 </tr>
             <?php endforeach; ?>

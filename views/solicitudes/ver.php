@@ -39,56 +39,58 @@ $estados = $conexion->query("SELECT * FROM estados")->fetchAll(PDO::FETCH_ASSOC)
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
 </head>
 
 <body class="container mt-5">
 
-<h3><?= $solicitud["titulo"] ?></h3>
+    <h3><?= $solicitud["titulo"] ?></h3>
 
-<p><b>Descripción:</b> <?= $solicitud["descripcion"] ?></p>
-<p><b>Estado:</b> <?= $solicitud["estado"] ?></p>
-<p><b>Prioridad:</b> <?= $solicitud["prioridad"] ?></p>
+    <p><b>Descripción:</b> <?= $solicitud["descripcion"] ?></p>
+    <p><b>Estado:</b> <?= $solicitud["estado"] ?></p>
+    <p><b>Prioridad:</b> <?= $solicitud["prioridad"] ?></p>
 
-<hr>
+    <hr>
 
-<h5>Cambiar estado</h5>
+    <h5>Cambiar estado</h5>
 
-<form action="../../controllers/EstadoController.php" method="POST">
-    <input type="hidden" name="id_solicitud" value="<?= $id ?>">
+    <form action="../../controllers/EstadoController.php" method="POST">
+        <input type="hidden" name="id_solicitud" value="<?= $id ?>">
 
-    <select name="id_estado" class="form-control">
-        <?php foreach ($estados as $e): ?>
-            <option value="<?= $e['id'] ?>"><?= $e['nombre'] ?></option>
-        <?php endforeach; ?>
-    </select>
+        <select name="id_estado" class="form-control">
+            <?php foreach ($estados as $e): ?>
+                <option value="<?= $e['id'] ?>"><?= $e['nombre'] ?></option>
+            <?php endforeach; ?>
+        </select>
 
-    <button class="btn btn-warning mt-2">Actualizar</button>
-</form>
+        <button class="btn btn-warning mt-2">Actualizar</button>
+    </form>
 
-<hr>
+    <hr>
 
-<h5>Comentarios</h5>
+    <h5>Comentarios</h5>
 
-<form action="../../controllers/ComentarioController.php" method="POST">
-    <input type="hidden" name="id_solicitud" value="<?= $id ?>">
+    <form action="../../controllers/ComentarioController.php" method="POST">
+        <input type="hidden" name="id_solicitud" value="<?= $id ?>">
 
-    <textarea name="comentario" class="form-control" required></textarea>
-    <button class="btn btn-primary mt-2">Comentar</button>
-</form>
+        <textarea name="comentario" class="form-control" required></textarea>
+        <button class="btn btn-primary mt-2">Comentar</button>
+    </form>
 
-<br>
+    <br>
 
-<?php foreach ($comentarios as $c): ?>
-    <div class="card mb-2">
-        <div class="card-body">
-            <b><?= $c["nombre"] ?></b><br>
-            <?= $c["comentario"] ?><br>
-            <small><?= $c["fecha"] ?></small>
+    <?php foreach ($comentarios as $c): ?>
+        <div class="card mb-2">
+            <div class="card-body">
+                <b><?= $c["nombre"] ?></b><br>
+                <?= $c["comentario"] ?><br>
+                <small><?= $c["fecha"] ?></small>
+            </div>
         </div>
-    </div>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 
 </body>
+
 </html>
