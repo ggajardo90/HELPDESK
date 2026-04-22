@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f5f6fa;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background-color: #2f3640;
+}
+
+.sidebar a {
+    display: block;
+    color: #dcdde1;
+    padding: 10px;
+    margin: 5px 0;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.sidebar a:hover,
+.sidebar .active {
+    background-color: #44bd32;
+    color: white;
+}
+
+/* CONTENIDO */
+.content {
+    flex: 1;
+}
+
+/* CARDS */
+.card-box {
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.bg-primary { background: #4a69bd; }
+.bg-warning { background: #f6b93b; }
+.bg-info { background: #38ada9; }
+.bg-success { background: #78e08f; }
+
+.chart-container {
+    position: relative;
+    height: 300px; /* 🔥 controla el tamaño aquí */
+}
+
+/* CARDS */
+.dashboard-card {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* HEADER */
+.card-header {
+    background: transparent;
+    border-bottom: none;
+    font-weight: 500;
+}
+
+/* CONTENEDOR DE GRAFICOS */
+.chart-container {
+    position: relative;
+    height: 280px; /* 🔥 MISMO TAMAÑO PARA AMBOS */
+}
+
+body {
+    background-color: #f5f6fa;
+}
