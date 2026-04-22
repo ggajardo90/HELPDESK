@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* LADO IZQUIERDO */
+.left-panel {
+    background-color: #dcdcdc;
+}
+
+.logo {
+    width: 250px;
+}
+
+.slogan {
+    color: #666;
+    margin-top: 10px;
+}
+
+/* LADO DERECHO */
+.right-panel {
+    background-color: #f4f4f4;
+}
+
+/* CAJA LOGIN */
+.login-box {
+    width: 320px;
+}
+
+/* INPUTS */
+.custom-input {
+    border-radius: 25px;
+    border: 2px solid #7bb31a;
+    padding: 10px 15px;
+}
+
+/* BOTÓN */
+.btn-login {
+    background-color: #7bb31a;
+    color: white;
+    border-radius: 25px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.btn-login:hover {
+    background-color: #689c16;
+}
