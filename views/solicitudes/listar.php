@@ -14,73 +14,114 @@ $sql = "SELECT s.*, p.nombre AS prioridad, e.nombre AS estado
         ORDER BY s.id DESC";
 
 $solicitudes = $conexion->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+ob_start();
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
+<h3>Solicitudes</h3>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Solicitudes</title>
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
-</head>
+<div class="card p-3 mt-3">
 
-<body class="container mt-5">
+    <!-- TOP BAR -->
+    <div class="d-flex justify-content-between mb-3">
 
-    <h3>Solicitudes</h3>
+        <a href="crear.php" class="btn btn-success">
+            <i class="fas fa-plus"></i> Nueva Solicitud
+        </a>
 
-    <a href="crear.php" class="btn btn-primary mb-3">Nueva Solicitud</a>
+        <input type="text" id="buscador" class="form-control w-25" placeholder="Buscar...">
 
-    <table class="table table-bordered">
-        <thead>
+    </div>
+
+    <!-- TABLA -->
+    <table class="table table-hover table-bordered">
+
+        <thead class="thead-light">
             <tr>
                 <th>ID</th>
                 <th>Título</th>
                 <th>Prioridad</th>
                 <th>Estado</th>
                 <th>Fecha</th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
-        <tbody>
+        <tbody id="tablaSolicitudes">
+
             <?php foreach ($solicitudes as $s): ?>
                 <tr>
+
                     <td><?= $s['id'] ?></td>
+
                     <td>
-                        <a href="ver.php?id=<?= $s['id'] ?>">
+                        <a>
                             <?= $s['titulo'] ?>
                         </a>
                     </td>
+
+                    <!-- PRIORIDAD -->
                     <td>
                         <?php
-                        $color = "secondary";
-
-                        if ($s['prioridad'] == "Baja") $color = "success";
-                        if ($s['prioridad'] == "Media") $color = "warning";
-                        if ($s['prioridad'] == "Alta") $color = "danger";
+                        $colorP = "secondary";
+                        if ($s['prioridad'] == "Alta") $colorP = "danger";
+                        if ($s['prioridad'] == "Media") $colorP = "warning";
+                        if ($s['prioridad'] == "Baja") $colorP = "success";
                         ?>
-                        <span class="badge badge-<?= $color ?>">
+                        <span class="badge badge-<?= $colorP ?>">
                             <?= $s['prioridad'] ?>
                         </span>
                     </td>
+
+                    <!-- ESTADO -->
                     <td>
                         <?php
-                        $color = "secondary";
-
-                        if ($s['estado'] == "Pendiente") $color = "warning";
-                        if ($s['estado'] == "En proceso") $color = "primary";
-                        if ($s['estado'] == "Finalizado") $color = "success";
+                        $colorE = "secondary";
+                        if ($s['estado'] == "Pendiente") $colorE = "warning";
+                        if ($s['estado'] == "En proceso") $colorE = "info";
+                        if ($s['estado'] == "Finalizado") $colorE = "success";
                         ?>
-                        <span class="badge badge-<?= $color ?>">
+                        <span class="badge badge-<?= $colorE ?>">
                             <?= $s['estado'] ?>
                         </span>
                     </td>
+
                     <td><?= $s['fecha_creacion'] ?></td>
+
+                    <!-- ACCIONES -->
+                    <td>
+                        <a href="ver.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-primary">
+                            <i class="fas fa-eye"></i>
+                        </a>
+
+                        <a href="editar.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+
                 </tr>
             <?php endforeach; ?>
+
         </tbody>
+
     </table>
 
-</body>
+</div>
 
-</html>
+<!-- BUSCADOR JS -->
+<script>
+    document.getElementById("buscador").addEventListener("keyup", function() {
+        let filtro = this.value.toLowerCase();
+        let filas = document.querySelectorAll("#tablaSolicitudes tr");
+
+        filas.forEach(fila => {
+            let texto = fila.textContent.toLowerCase();
+            fila.style.display = texto.includes(filtro) ? "" : "none";
+        });
+    });
+</script>
+
+<?php
+$contenido = ob_get_clean();
+include "../layouts/main.php";
+?>

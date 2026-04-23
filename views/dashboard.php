@@ -12,166 +12,131 @@ $total = $conexion->query("SELECT COUNT(*) FROM solicitudes")->fetchColumn();
 $pendientes = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_estado = 1")->fetchColumn();
 $proceso = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_estado = 2")->fetchColumn();
 $finalizadas = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_estado = 3")->fetchColumn();
+
+// prioridades
+$alta = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_prioridad = 3")->fetchColumn();
+$media = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_prioridad = 2")->fetchColumn();
+$baja = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_prioridad = 1")->fetchColumn();
+
+// últimas solicitudes
+$ultimas = $conexion->query("SELECT * FROM solicitudes ORDER BY id DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+
+ob_start();
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
+<h3>Dashboard</h3>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
+<div class="row mt-4">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/dashboard.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-
-<body>
-
-    <div class="d-flex">
-
-        <!-- SIDEBAR -->
-        <div class="sidebar p-3">
-            <h4 class="text-white">HelpDesk</h4>
-
-            <a href="#" class="active">Dashboard</a>
-            <a href="solicitudes/listar.php">Solicitudes</a>
-
-            <hr>
-            <a href="../controllers/logout.php">Cerrar sesión</a>
-        </div>
-
-        <!-- CONTENIDO -->
-        <div class="content p-4 w-100">
-
-            <h3>Dashboard</h3>
-
-            <!-- CARDS -->
-            <div class="row mt-4">
-
-                <div class="col-md-3">
-                    <div class="card-box bg-primary">
-                        <h6>Total</h6>
-                        <h2><?= $total ?></h2>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card-box bg-warning">
-                        <h6>Pendientes</h6>
-                        <h2><?= $pendientes ?></h2>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card-box bg-info">
-                        <h6>En proceso</h6>
-                        <h2><?= $proceso ?></h2>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="card-box bg-success">
-                        <h6>Finalizadas</h6>
-                        <h2><?= $finalizadas ?></h2>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- GRAFICOS -->
-
-            <div class="row mt-4">
-
-                <!-- GRAFICO ESTADO -->
-                <div class="col-md-6">
-                    <div class="card dashboard-card">
-                        <div class="card-header d-flex justify-content-between">
-                            <span>Solicitudes por Estado</span>
-                            <small>Este mes</small>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="graficoEstado"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- GRAFICO PRIORIDAD -->
-                <div class="col-md-6">
-                    <div class="card dashboard-card">
-                        <div class="card-header d-flex justify-content-between">
-                            <span>Solicitudes por Prioridad</span>
-                            <small>Este mes</small>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="graficoPrioridad"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
+    <div class="col-md-3">
+        <div class="card-box bg-blue">
+            <h6>Total</h6>
+            <h2><?= $total ?></h2>
+            <i class="fas fa-database"></i>
         </div>
     </div>
 
-    <script>
-        // gráfico estado
-        new Chart(document.getElementById("graficoEstado"), {
-            type: "doughnut",
-            data: {
-                labels: ["Pendiente", "En proceso", "Finalizado"],
-                datasets: [{
-                    data: [<?= $pendientes ?>, <?= $proceso ?>, <?= $finalizadas ?>],
-                    backgroundColor: ["#ffc107", "#17a2b8", "#28a745"]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // 🔥 CLAVE
-                cutout: "60%" // hace el donut más limpio
-            }
-        });
+    <div class="col-md-3">
+        <div class="card-box bg-yellow">
+            <h6>Pendientes</h6>
+            <h2><?= $pendientes ?></h2>
+            <i class="fas fa-clock"></i>
+        </div>
+    </div>
 
-        // gráfico prioridad
-        <?php
-        $alta = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_prioridad = 3")->fetchColumn();
-        $media = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_prioridad = 2")->fetchColumn();
-        $baja = $conexion->query("SELECT COUNT(*) FROM solicitudes WHERE id_prioridad = 1")->fetchColumn();
-        ?>
+    <div class="col-md-3">
+        <div class="card-box bg-cyan">
+            <h6>En proceso</h6>
+            <h2><?= $proceso ?></h2>
+            <i class="fas fa-tools"></i>
+        </div>
+    </div>
 
-        new Chart(document.getElementById("graficoPrioridad"), {
-            type: "bar",
-            data: {
-                labels: ["Alta", "Media", "Baja"],
-                datasets: [{
-                    data: [<?= $alta ?>, <?= $media ?>, <?= $baja ?>],
-                    backgroundColor: ["#dc3545", "#ffc107", "#28a745"]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // 🔥 CLAVE
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+    <div class="col-md-3">
+        <div class="card-box bg-green">
+            <h6>Finalizadas</h6>
+            <h2><?= $finalizadas ?></h2>
+            <i class="fas fa-check"></i>
+        </div>
+    </div>
 
-</body>
+</div>
 
+<div class="row mt-4">
 
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5>Solicitudes por Estado</h5>
+            <div class="chart-container">
+                <canvas id="graficoEstado"></canvas>
+            </div>
+        </div>
+    </div>
 
-</html>
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h5>Solicitudes por Prioridad</h5>
+            <div class="chart-container">
+                <canvas id="graficoPrioridad"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- TABLA -->
+<div class="card mt-4 p-3">
+    <h5>Últimas solicitudes</h5>
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Fecha</th>
+        </tr>
+
+        <?php foreach ($ultimas as $u): ?>
+            <tr>
+                <td><?= $u['id'] ?></td>
+                <td><?= $u['titulo'] ?></td>
+                <td><?= $u['fecha_creacion'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+
+    </table>
+</div>
+
+<script>
+    new Chart(document.getElementById("graficoEstado"), {
+        type: "doughnut",
+        data: {
+            labels: ["Pendiente", "Proceso", "Finalizado"],
+            datasets: [{
+                data: [<?= $pendientes ?>, <?= $proceso ?>, <?= $finalizadas ?>],
+                backgroundColor: ["#f6b93b", "#38ada9", "#78e08f"]
+            }]
+        },
+        options: {
+            maintainAspectRatio: false
+        }
+    });
+
+    new Chart(document.getElementById("graficoPrioridad"), {
+        type: "bar",
+        data: {
+            labels: ["Alta", "Media", "Baja"],
+            datasets: [{
+                data: [<?= $alta ?>, <?= $media ?>, <?= $baja ?>],
+                backgroundColor: ["#e55039", "#f6b93b", "#78e08f"]
+            }]
+        },
+        options: {
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+<?php
+$contenido = ob_get_clean();
+include "layouts/main.php";
+?>

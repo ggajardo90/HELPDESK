@@ -1,73 +1,129 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f5f6fa;
+    background: #f5f6fa;
 }
 
 /* SIDEBAR */
 .sidebar {
-    width: 220px;
+    width: 230px;
     height: 100vh;
-    background-color: #2f3640;
+    background: #2f3640;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar .logo {
+    margin-bottom: 30px;
 }
 
 .sidebar a {
     display: block;
     color: #dcdde1;
     padding: 10px;
-    margin: 5px 0;
+    border-radius: 6px;
+    margin-bottom: 5px;
     text-decoration: none;
-    border-radius: 5px;
 }
 
 .sidebar a:hover,
-.sidebar .active {
-    background-color: #44bd32;
+.sidebar a.active {
+    background: #44bd32;
     color: white;
 }
 
-/* CONTENIDO */
-.content {
+/* MAIN */
+.main-content {
     flex: 1;
+}
+
+/* TOPBAR */
+.topbar {
+    background: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.user-info {
+    font-weight: 500;
 }
 
 /* CARDS */
 .card-box {
+    border-radius: 10px;
     padding: 20px;
-    border-radius: 10px;
     color: white;
-    text-align: center;
-}
-
-.bg-primary { background: #4a69bd; }
-.bg-warning { background: #f6b93b; }
-.bg-info { background: #38ada9; }
-.bg-success { background: #78e08f; }
-
-.chart-container {
     position: relative;
-    height: 300px; /* 🔥 controla el tamaño aquí */
 }
 
-/* CARDS */
-.dashboard-card {
+.card-box i {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 25px;
+    opacity: 0.3;
+}
+
+/* COLORES */
+.bg-blue { background: #4a69bd; }
+.bg-yellow { background: #f6b93b; }
+.bg-cyan { background: #38ada9; }
+.bg-green { background: #78e08f; }
+
+/* CHART */
+.chart-container {
+    height: 280px;
+}
+
+table {
+    background: white;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 
-/* HEADER */
-.card-header {
-    background: transparent;
-    border-bottom: none;
-    font-weight: 500;
+.table thead {
+    background: #f1f2f6;
 }
 
-/* CONTENEDOR DE GRAFICOS */
-.chart-container {
-    position: relative;
-    height: 280px; /* 🔥 MISMO TAMAÑO PARA AMBOS */
-}
-
-body {
+.table-hover tbody tr:hover {
     background-color: #f5f6fa;
+}
+
+.badge {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+/* COMENTARIOS */
+.comentarios-box {
+    height: 400px;          /* 🔥 altura fija */
+    overflow-y: auto;       /* scroll interno */
+    padding-right: 5px;
+}
+.comentario-item {
+    background: #f5f6fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.comentario-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.comentario-body {
+    margin-top: 5px;
+}
+
+.comentarios-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comentarios-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }
