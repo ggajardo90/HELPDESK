@@ -3,6 +3,13 @@ session_start();
 require_once "../config/database.php";
 
 if (!isset($_SESSION["usuario_id"])) {
+    header("Location: ../auth/login.php");
+    exit;
+}
+
+$rol = $_SESSION["usuario_rol"];
+
+if (!isset($_SESSION["usuario_id"])) {
     header("Location: auth/login.php");
     exit;
 }

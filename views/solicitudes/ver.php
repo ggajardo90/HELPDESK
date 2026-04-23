@@ -2,19 +2,22 @@
 session_start();
 require_once "../../config/database.php";
 
+// Validar sesión
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: ../auth/login.php");
     exit;
 }
 
+$rol = $_SESSION["usuario_rol"];
 $id = $_GET["id"];
+
+// técnicos
 $tecnicos = $conexion->query("SELECT * FROM usuarios WHERE id_rol = 2")->fetchAll(PDO::FETCH_ASSOC);
 
 // solicitud
 $sql = "SELECT s.*, p.nombre AS prioridad, e.nombre AS estado, 
-       u.nombre as usuario, 
-       t.nombre as tecnico
-
+               u.nombre as usuario, 
+               t.nombre as tecnico
         FROM solicitudes s
         LEFT JOIN prioridades p ON s.id_prioridad = p.id
         LEFT JOIN estados e ON s.id_estado = e.id
@@ -94,28 +97,56 @@ ob_start();
 
             <hr>
 
-            <!-- CAMBIAR ESTADO -->
+            <!-- CAMBIAR ESTADO (ADMIN + TECNICO) -->
+            <?php if ($rol == 1 || $rol == 2): ?>
+                <form action="../../controllers/EstadoController.php" method="POST">
+
+                    <input type="hidden" name="id_solicitud" value="<?= $id ?>">
+
+                    <label>Cambiar estado</label>
+
+                    <select name="id_estado" class="form-control">
+                        <?php foreach ($estados as $e): ?>
+                            <option value="<?= $e['id'] ?>">
+                                <?= $e['nombre'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <button class="btn btn-warning btn-block mt-2">
+                        Actualizar
+                    </button>
+
+                </form>
+            <?php endif; ?>
+
             <hr>
 
-            <form action="../../controllers/TecnicoController.php" method="POST">
-                <input type="hidden" name="id_solicitud" value="<?= $id ?>">
+            <!-- ASIGNAR TECNICO (SOLO ADMIN) -->
+            <?php if ($rol == 1): ?>
+                <form action="../../controllers/TecnicoController.php" method="POST">
 
-                <label>Asignar técnico</label>
+                    <input type="hidden" name="id_solicitud" value="<?= $id ?>">
 
-                <select name="id_tecnico" class="form-control">
-                    <option value="">-- Seleccionar --</option>
+                    <label>Asignar técnico</label>
 
-                    <?php foreach ($tecnicos as $t): ?>
-                        <option value="<?= $t['id'] ?>">
-                            <?= $t['nombre'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                    <select name="id_tecnico" class="form-control">
+                        <option value="">-- Seleccionar --</option>
 
-                <button class="btn btn-info btn-block mt-2">
-                    Asignar
-                </button>
-            </form>
+                        <?php foreach ($tecnicos as $t): ?>
+                            <option value="<?= $t['id'] ?>">
+                                <?= $t['nombre'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <button class="btn btn-info btn-block mt-2">
+                        Asignar
+                    </button>
+
+                </form>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -130,7 +161,7 @@ ob_start();
             <form action="../../controllers/ComentarioController.php" method="POST">
                 <input type="hidden" name="id_solicitud" value="<?= $id ?>">
 
-                <textarea name="comentario" class="form-control" rows="3" style="resize: none;"></textarea>
+                <textarea name="comentario" class="form-control" rows="3" style="resize: none;" required></textarea>
 
                 <button class="btn btn-primary mt-2">
                     <i class="fas fa-paper-plane"></i> Enviar

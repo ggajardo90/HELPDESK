@@ -7,6 +7,13 @@ if (!isset($_SESSION["usuario_id"])) {
     exit;
 }
 
+$rol = $_SESSION["usuario_rol"];
+
+if (!isset($_SESSION["usuario_id"])) {
+    header("Location: ../auth/login.php");
+    exit;
+}
+
 $sql = "SELECT s.*, p.nombre AS prioridad, e.nombre AS estado,
                t.nombre AS tecnico
         FROM solicitudes s
