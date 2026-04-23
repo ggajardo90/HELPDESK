@@ -8,13 +8,18 @@ if (!isset($_SESSION["usuario_id"])) {
 }
 
 $id = $_GET["id"];
+$tecnicos = $conexion->query("SELECT * FROM usuarios WHERE id_rol = 2")->fetchAll(PDO::FETCH_ASSOC);
 
 // solicitud
-$sql = "SELECT s.*, p.nombre AS prioridad, e.nombre AS estado, u.nombre as usuario
+$sql = "SELECT s.*, p.nombre AS prioridad, e.nombre AS estado, 
+       u.nombre as usuario, 
+       t.nombre as tecnico
+
         FROM solicitudes s
         LEFT JOIN prioridades p ON s.id_prioridad = p.id
         LEFT JOIN estados e ON s.id_estado = e.id
         LEFT JOIN usuarios u ON s.id_usuario = u.id
+        LEFT JOIN usuarios t ON s.id_tecnico = t.id
         WHERE s.id = :id";
 
 $stmt = $conexion->prepare($sql);
@@ -53,6 +58,9 @@ ob_start();
 
             <p><b>Solicitante:</b> <?= $solicitud["usuario"] ?></p>
             <p><b>Fecha:</b> <?= $solicitud["fecha_creacion"] ?></p>
+            <p><b>Técnico:</b>
+                <?= $solicitud["tecnico"] ? $solicitud["tecnico"] : "No asignado" ?>
+            </p>
 
             <!-- PRIORIDAD -->
             <?php
@@ -87,21 +95,27 @@ ob_start();
             <hr>
 
             <!-- CAMBIAR ESTADO -->
-            <form action="../../controllers/EstadoController.php" method="POST">
+            <hr>
+
+            <form action="../../controllers/TecnicoController.php" method="POST">
                 <input type="hidden" name="id_solicitud" value="<?= $id ?>">
 
-                <label>Cambiar estado</label>
-                <select name="id_estado" class="form-control">
-                    <?php foreach ($estados as $e): ?>
-                        <option value="<?= $e['id'] ?>"><?= $e['nombre'] ?></option>
+                <label>Asignar técnico</label>
+
+                <select name="id_tecnico" class="form-control">
+                    <option value="">-- Seleccionar --</option>
+
+                    <?php foreach ($tecnicos as $t): ?>
+                        <option value="<?= $t['id'] ?>">
+                            <?= $t['nombre'] ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
 
-                <button class="btn btn-warning btn-block mt-2">
-                    Actualizar
+                <button class="btn btn-info btn-block mt-2">
+                    Asignar
                 </button>
             </form>
-
         </div>
     </div>
 
