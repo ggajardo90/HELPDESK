@@ -8,12 +8,12 @@ if (!isset($_SESSION["usuario_id"])) {
 }
 
 $sql = "SELECT s.*, p.nombre AS prioridad, e.nombre AS estado,
-       t.nombre AS tecnico
-FROM solicitudes s
-LEFT JOIN prioridades p ON s.id_prioridad = p.id
-LEFT JOIN estados e ON s.id_estado = e.id
-LEFT JOIN usuarios t ON s.id_tecnico = t.id
-ORDER BY s.id DESC";
+               t.nombre AS tecnico
+        FROM solicitudes s
+        LEFT JOIN prioridades p ON s.id_prioridad = p.id
+        LEFT JOIN estados e ON s.id_estado = e.id
+        LEFT JOIN usuarios t ON s.id_tecnico = t.id
+        ORDER BY s.id DESC";
 
 $solicitudes = $conexion->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
