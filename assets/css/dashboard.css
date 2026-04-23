@@ -127,3 +127,31 @@ table {
     background: #ccc;
     border-radius: 10px;
 }
+
+/* === MEJORAS FORMULARIOS === */
+
+.card {
+    border-radius: 10px;
+}
+
+textarea {
+    resize: none;
+}
+
+.form-control {
+    border-radius: 8px;
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.dropdown-item {
+    white-space: normal;
+}

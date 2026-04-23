@@ -6,21 +6,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $titulo = $_POST["titulo"];
     $descripcion = $_POST["descripcion"];
-    $id_prioridad = $_POST["id_prioridad"];
     $id_usuario = $_SESSION["usuario_id"];
+    $id_prioridad = $_POST["id_prioridad"];
 
-    $sql = "INSERT INTO solicitudes (titulo, descripcion, id_usuario, id_prioridad)
-            VALUES (:titulo, :descripcion, :id_usuario, :id_prioridad)";
+    // INSERT SOLICITUD
+    $sql = "INSERT INTO solicitudes (titulo, descripcion, id_usuario, id_prioridad, id_estado) 
+            VALUES (:titulo, :descripcion, :usuario, :prioridad, 1)";
 
     $stmt = $conexion->prepare($sql);
-    $stmt->bindParam(":titulo", $titulo);
-    $stmt->bindParam(":descripcion", $descripcion);
-    $stmt->bindParam(":id_usuario", $id_usuario);
-    $stmt->bindParam(":id_prioridad", $id_prioridad);
+    $stmt->execute([
+        ":titulo" => $titulo,
+        ":descripcion" => $descripcion,
+        ":usuario" => $id_usuario,
+        ":prioridad" => $id_prioridad
+    ]);
 
-    if ($stmt->execute()) {
-        header("Location: ../views/solicitudes/listar.php");
-    } else {
-        echo "Error al guardar";
-    }
+    // 🔥 OBTENER ID DE LA SOLICITUD
+    $idSolicitud = $conexion->lastInsertId();
+
+    // 🔔 CREAR NOTIFICACIÓN
+    $mensaje = "Nueva solicitud: " . $titulo;
+
+    $sqlNoti = "INSERT INTO notificaciones (mensaje, id_solicitud) 
+                VALUES (:mensaje, :id_solicitud)";
+
+    $stmtNoti = $conexion->prepare($sqlNoti);
+    $stmtNoti->execute([
+        ":mensaje" => $mensaje,
+        ":id_solicitud" => $idSolicitud
+    ]);
+
+    header("Location: ../views/solicitudes/listar.php");
 }

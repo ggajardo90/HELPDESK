@@ -2,52 +2,85 @@
 session_start();
 require_once "../../config/database.php";
 
+// validar sesión
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: ../auth/login.php");
     exit;
 }
 
+// SOLO ADMIN Y USUARIO (el técnico no crea)
+if ($_SESSION["usuario_rol"] == 2) {
+    die("Acceso no permitido");
+}
+
 // cargar prioridades
 $prioridades = $conexion->query("SELECT * FROM prioridades")->fetchAll(PDO::FETCH_ASSOC);
+
+ob_start();
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Nueva Solicitud</title>
-    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
-</head>
+    <h3 class="mb-0">Nueva Solicitud</h3>
 
-<body class="container mt-5">
+    <a href="listar.php" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
 
-    <h3>Nueva Solicitud</h3>
+</div>
+
+<!-- FORM -->
+<div class="card p-4 shadow-sm">
 
     <form action="../../controllers/SolicitudController.php" method="POST">
 
-        <div class="form-group">
-            <label>Título</label>
-            <input type="text" name="titulo" class="form-control" required>
+        <div class="row">
+
+            <!-- TITULO -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" name="titulo" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- PRIORIDAD -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select name="id_prioridad" class="form-control">
+                        <?php foreach ($prioridades as $p): ?>
+                            <option value="<?= $p['id'] ?>">
+                                <?= $p['nombre'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DESCRIPCIÓN -->
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea name="descripcion" class="form-control" rows="5" style="resize: none;" required></textarea>
+                </div>
+            </div>
+
         </div>
 
-        <div class="form-group">
-            <label>Descripción</label>
-            <textarea name="descripcion" class="form-control" required></textarea>
+        <!-- BOTONES -->
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Crear Solicitud
+            </button>
         </div>
 
-        <div class="form-group">
-            <label>Prioridad</label>
-            <select name="id_prioridad" class="form-control" required>
-                <?php foreach ($prioridades as $p): ?>
-                    <option value="<?= $p['id'] ?>"><?= $p['nombre'] ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <button class="btn btn-success">Guardar</button>
     </form>
 
-</body>
+</div>
 
-</html>
+<?php
+$contenido = ob_get_clean();
+include "../layouts/main.php";
+?>

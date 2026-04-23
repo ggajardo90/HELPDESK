@@ -61,9 +61,11 @@ ob_start();
 
             <p><b>Solicitante:</b> <?= $solicitud["usuario"] ?></p>
             <p><b>Fecha:</b> <?= $solicitud["fecha_creacion"] ?></p>
-            <p><b>Técnico:</b>
-                <?= $solicitud["tecnico"] ? $solicitud["tecnico"] : "No asignado" ?>
-            </p>
+            <?php if (!$solicitud["tecnico"]): ?>
+                <div class="alert alert-warning">
+                    ⚠ Esta solicitud no tiene técnico asignado
+                </div>
+            <?php endif; ?>
 
             <!-- PRIORIDAD -->
             <?php
